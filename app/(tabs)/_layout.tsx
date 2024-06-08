@@ -1,46 +1,80 @@
-import { Tabs } from "expo-router";
+import { Stack, useRouter } from "expo-router";
+import { ChevronDown } from "lucide-react-native";
 import React from "react";
-
-import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { View, Text } from "react-native";
+import {
+	GestureHandlerRootView,
+	TouchableOpacity,
+} from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TabLayout() {
-	const colorScheme = useColorScheme();
+	const router = useRouter();
 
 	return (
-		<Tabs
+		<Stack
 			screenOptions={{
-				tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-				headerShown: false,
+				headerShown: true,
+				headerTitle: () => (
+					<GestureHandlerRootView style={{}}>
+						<TouchableOpacity onPress={() => router.push("/currencies")}>
+							<View style={{ display: "flex", flexDirection: "row", gap: 8 }}>
+								<Text style={{ color: "#fff", fontSize: 17, fontWeight: 600 }}>
+									Bitcoin
+								</Text>
+								<ChevronDown color="#fff" />
+							</View>
+						</TouchableOpacity>
+					</GestureHandlerRootView>
+				),
 			}}
 		>
-			<Tabs.Screen
+			<Stack.Screen
 				name="index"
 				options={{
 					title: "Home",
-					tabBarIcon: ({ color, focused }) => (
-						<TabBarIcon
-							size={18}
-							name={focused ? "home" : "home-outline"}
-							color={color}
-						/>
+				}}
+			/>
+
+			<Stack.Screen
+				name="currencies"
+				options={{
+					header: () => (
+						<SafeAreaView style={{}}>
+							<Text
+								style={{
+									color: "#fff",
+									textAlign: "center",
+									fontSize: 17,
+									fontWeight: 600,
+								}}
+							>
+								Currencies
+							</Text>
+						</SafeAreaView>
 					),
 				}}
 			/>
-			<Tabs.Screen
+
+			<Stack.Screen
 				name="order-book"
 				options={{
-					title: "OrderBook",
-					tabBarIcon: ({ color, focused }) => (
-						<TabBarIcon
-							size={18}
-							name={focused ? "bookmark" : "bookmark-outline"}
-							color={color}
-						/>
+					header: () => (
+						<SafeAreaView style={{}}>
+							<Text
+								style={{
+									color: "#fff",
+									textAlign: "center",
+									fontSize: 17,
+									fontWeight: 600,
+								}}
+							>
+								Order Book
+							</Text>
+						</SafeAreaView>
 					),
 				}}
 			/>
-		</Tabs>
+		</Stack>
 	);
 }
