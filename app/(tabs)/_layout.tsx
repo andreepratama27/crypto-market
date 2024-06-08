@@ -1,3 +1,4 @@
+import currencyStore from "@/stores/currency.store";
 import { Stack, useRouter } from "expo-router";
 import { ChevronDown } from "lucide-react-native";
 import React from "react";
@@ -7,8 +8,10 @@ import {
 	TouchableOpacity,
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useStore } from "zustand";
 
 export default function TabLayout() {
+	const { currency } = useStore(currencyStore);
 	const router = useRouter();
 
 	return (
@@ -20,7 +23,7 @@ export default function TabLayout() {
 						<TouchableOpacity onPress={() => router.push("/currencies")}>
 							<View style={{ display: "flex", flexDirection: "row", gap: 8 }}>
 								<Text style={{ color: "#fff", fontSize: 17, fontWeight: 600 }}>
-									Bitcoin
+									{currency?.description}
 								</Text>
 								<ChevronDown color="#fff" />
 							</View>
