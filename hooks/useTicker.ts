@@ -1,11 +1,17 @@
+import axios from "@/libs/axios";
+import { getTicker } from "@/services/currency.service";
+import currencyStore from "@/stores/currency.store";
 import { useEffect, useRef, useState } from "react";
+import { useStore } from "zustand";
 
 const useTicker = () => {
+	const { currency, setTicker: setTickerAction } = useStore(currencyStore)
+
 	const ws = useRef<WebSocket>();
 	const [ticker, setTicker] = useState();
 
 	useEffect(() => {
-		const newChannel = "chart:tick-btcidr";
+		const newChannel = `chart:tick-${currency?.symbol.toLocaleLowerCase()}`;
 		ws.current = new WebSocket("wss://ws3.indodax.com/ws/");
 
 		ws.current.onopen = (e) => {
@@ -42,10 +48,17 @@ const useTicker = () => {
 
 		const wsCurrent = ws.current;
 
+		axios.get(`/api/ticker/${currency?.symbol.toLowerCase()}`).then((response) => {
+			const { ticker } = response.data
+			setTickerAction(ticker)
+		}).catch((err) => {
+			console.log('fff', err)
+		})
+
 		return () => {
 			wsCurrent.close();
 		};
-	}, []);
+	}, [currency]);
 
 	return {
 		ticker,

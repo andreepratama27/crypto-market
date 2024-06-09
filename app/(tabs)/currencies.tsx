@@ -1,7 +1,4 @@
-import { getCurrencies } from "@/services/currency.service";
 import currencyStore, { Currency } from "@/stores/currency.store";
-import { styles } from "@/styles";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
@@ -9,12 +6,7 @@ import { useStore } from "zustand";
 
 export default function Currencies() {
 	const router = useRouter();
-	const { setCurrency } = useStore(currencyStore);
-
-	const data = useQuery({
-		queryKey: ["get-currencies"],
-		queryFn: getCurrencies,
-	});
+	const { currencies, setCurrency } = useStore(currencyStore);
 
 	const handleSetCurrency = (currencyItem: Currency) => {
 		setCurrency(currencyItem);
@@ -25,7 +17,7 @@ export default function Currencies() {
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<FlatList
-				data={data.data}
+				data={currencies}
 				renderItem={({ item }) => (
 					<TouchableOpacity
 						style={{

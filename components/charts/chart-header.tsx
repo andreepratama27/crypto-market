@@ -1,11 +1,15 @@
 import useTicker from "@/hooks/useTicker";
+import currencyStore from "@/stores/currency.store";
 import { flex, fonts, styles } from "@/styles";
 import { formatCurrency } from "@/utils";
 import { View, Text } from "react-native";
 import { CandlestickChart } from "react-native-wagmi-charts";
+import { useStore } from "zustand";
 
 const ViewBasic = () => {
 	const { ticker } = useTicker();
+	const { currency } = useStore(currencyStore)
+
 	return (
 		<View
 			style={{
@@ -13,7 +17,7 @@ const ViewBasic = () => {
 				paddingHorizontal: 16,
 			}}
 		>
-			<Text style={{ ...styles.text, fontSize: 14 }}>Bitcoin Price</Text>
+			<Text style={{ ...styles.text, fontSize: 14, textTransform: 'capitalize' }}>{currency?.coingecko_id} Price</Text>
 			<Text style={{ ...styles.text, fontSize: 20, fontWeight: 700 }}>
 				{formatCurrency(ticker as number)}
 			</Text>

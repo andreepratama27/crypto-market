@@ -23,20 +23,42 @@ export interface Currency {
 	url_logo_png: string;
 	is_maintenance: number;
 	is_market_suspended: number;
-	coin_gecko_id: number;
+	coingecko_id: number;
 	cmc_id: number;
 }
 
+export interface Ticker {
+	last: string;
+	buy: string;
+	sell: string;
+	high: string;
+	low: string;
+	server_time: string;
+}
+
 interface State {
+	currencies: Currency[];
 	currency: Currency | null;
+	ticker: Ticker | null;
 }
 
 interface Action {
+	initCurrencies: (currencies: Currency[]) => void;
 	setCurrency: (currency: Currency) => void;
+	setTicker: (ticker: Ticker) => void;
 }
 
 const currencyStore = createStore<State & Action>()((set) => ({
 	currency: null,
+	ticker: null,
+	currencies: [],
+
+	initCurrencies(item) {
+		set(state => ({
+			...state,
+			currencies: item
+		}))
+	},
 
 	setCurrency(item) {
 		set((state) => ({
@@ -44,6 +66,13 @@ const currencyStore = createStore<State & Action>()((set) => ({
 			currency: item,
 		}));
 	},
+
+	setTicker(item) {
+		set(state => ({
+			...state,
+			ticker: item
+		}))
+	}
 }));
 
 export default currencyStore;

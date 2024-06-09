@@ -1,4 +1,6 @@
 const formatCurrency = (value: number) => {
+	if (!value) return 'Rp 0'
+
 	return Intl.NumberFormat("id-ID", {
 		style: "currency",
 		currency: "IDR",
