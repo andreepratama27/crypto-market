@@ -5,11 +5,24 @@ import { useEffect, useRef, useState } from "react";
 import { useStore } from "zustand";
 
 const useTicker = () => {
-	const { currency, setTicker: setTickerAction } = useStore(currencyStore)
+	const { currency, setTicker: setTickerAction } = useStore(currencyStore);
 
 	const ws = useRef<WebSocket>();
 	const [ticker, setTicker] = useState();
 
+	const fetchApi = () => {
+		return axios
+			.get(`/api/ticker/${currency?.symbol.toLowerCase()}`)
+			.then((response) => {
+				const { ticker } = response.data;
+				setTickerAction(ticker);
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	};
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		const newChannel = `chart:tick-${currency?.symbol.toLocaleLowerCase()}`;
 		ws.current = new WebSocket("wss://ws3.indodax.com/ws/");
@@ -44,16 +57,11 @@ const useTicker = () => {
 				const middlePrice = ticks[ticks.length - 1][2];
 				setTicker(middlePrice);
 			}
+
+			fetchApi();
 		};
 
 		const wsCurrent = ws.current;
-
-		axios.get(`/api/ticker/${currency?.symbol.toLowerCase()}`).then((response) => {
-			const { ticker } = response.data
-			setTickerAction(ticker)
-		}).catch((err) => {
-			console.log('fff', err)
-		})
 
 		return () => {
 			wsCurrent.close();

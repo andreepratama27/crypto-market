@@ -7,8 +7,7 @@ import { CandlestickChart } from "react-native-wagmi-charts";
 import { useStore } from "zustand";
 
 const ViewBasic = () => {
-	const { ticker } = useTicker();
-	const { currency } = useStore(currencyStore)
+	const { currency, ticker: tickerState } = useStore(currencyStore);
 
 	return (
 		<View
@@ -17,9 +16,13 @@ const ViewBasic = () => {
 				paddingHorizontal: 16,
 			}}
 		>
-			<Text style={{ ...styles.text, fontSize: 14, textTransform: 'capitalize' }}>{currency?.coingecko_id} Price</Text>
+			<Text
+				style={{ ...styles.text, fontSize: 14, textTransform: "capitalize" }}
+			>
+				{currency?.coingecko_id} Price
+			</Text>
 			<Text style={{ ...styles.text, fontSize: 20, fontWeight: 700 }}>
-				{formatCurrency(ticker as number)}
+				{formatCurrency(Number(tickerState?.sell))}
 			</Text>
 		</View>
 	);

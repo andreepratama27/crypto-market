@@ -34,6 +34,7 @@ export interface Ticker {
 	high: string;
 	low: string;
 	server_time: string;
+	median?: string;
 }
 
 interface State {
@@ -54,10 +55,10 @@ const currencyStore = createStore<State & Action>()((set) => ({
 	currencies: [],
 
 	initCurrencies(item) {
-		set(state => ({
+		set((state) => ({
 			...state,
-			currencies: item
-		}))
+			currencies: item,
+		}));
 	},
 
 	setCurrency(item) {
@@ -68,11 +69,11 @@ const currencyStore = createStore<State & Action>()((set) => ({
 	},
 
 	setTicker(item) {
-		set(state => ({
+		set((state) => ({
 			...state,
-			ticker: item
-		}))
-	}
+			ticker: item,
+		}));
+	},
 }));
 
 export default currencyStore;
